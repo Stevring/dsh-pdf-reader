@@ -117,11 +117,28 @@ Client 改动走 bundle 的 `rebuilt` 热替换；Host 半改动由 HMR 的模�
 
 ## 安装
 
-1. 克隆本仓库，确认 `lib/client.js` 存在。
-2. 把本目录装进 DSH profile（下面以 `web` 为例）：
-   - 用 `plugin_manager` 工具的 `install_bundle`，spec 指向本目录；或
-   - 在 profile 的 `package.json` 里加 `"@local/pdf-reader": "link:/path/to/dsh-pdf-reader"`，并在 `dsh.profile.bundles` 里选中 `@local/pdf-reader`。
-3. 重载 DSH（重启进程，或在插件列表里禁用/启用一次）。
+从 GitHub 直接装进 DSH 的 Web profile（把 `web` 换成你的 profile 名）：
+
+```bash
+dsh plugin --profile web add github:Stevring/dsh-pdf-reader
+```
+
+`dsh plugin` 把参数转发给 profile 目录里的 pnpm，安装完成后 bundle 会自动选中。重启 `dsh web`，或在插件列表里禁用/启用一次，即可生效。
+
+也可以让 agent 用 `plugin_manager` 的 `install_bundle` 安装同一个 spec（`github:Stevring/dsh-pdf-reader`）。
+
+升级到仓库最新提交：
+
+```bash
+dsh plugin --profile web update @local/pdf-reader
+```
+
+本地开发时 clone 后链接：
+
+```bash
+git clone https://github.com/Stevring/dsh-pdf-reader
+dsh plugin --profile web add ../dsh-pdf-reader
+```
 
 `cordis.patch.yml` 会插入 `pdf-reader` 行，不需要手改 composition。插件没有配置项。
 
